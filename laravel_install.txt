@@ -1,0 +1,42 @@
+composer create-project --prefer-dist laravel/laravel blog
+
+
+
+composer require "laravelcollective/html":"^5.2.0"
+
+'providers' => [
+// ...
+Collective\Html\HtmlServiceProvider::class,
+// ...
+],
+
+
+'aliases' => [
+// ...
+  'Form' => Collective\Html\FormFacade::class,
+  'Html' => Collective\Html\HtmlFacade::class,
+// ...
+],
+
+
+composer require laracasts/flash
+
+'providers' => [
+    Laracasts\Flash\FlashServiceProvider::class,
+];
+
+php artisan vendor:publish --provider="Laracasts\Flash\FlashServiceProvider"
+
+
+composer require sven/artisan-view:^3.0 --dev
+
+
+php artisan make:auth
+
+Route::group(['middleware' => ['auth']], function () {
+	Route::resource('questions', 'QuestionController',[
+	    'only' => ['index', 'create', 'store', 'edit', 'update', 'destroy'],
+	    'names' => ['index' => 'question_link','create' => 'create_question_path', 'store' => 'question_store', 'edit' => 'question_edit', 'update' => 'question_update']
+	]);
+});
+
